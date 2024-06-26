@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, Image, Button } from 'react-native';
+import { View, Text, StyleSheet, Image, Button , TouchableOpacity } from 'react-native';
 import Video from 'react-native-video';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import RNFS from 'react-native-fs';
@@ -10,6 +10,8 @@ const MediaViewer = () => {
   const { files, currentIndex } = route.params;
   const [index, setIndex] = useState(currentIndex);
   const [paused, setPaused] = useState(true);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const videoRef = useRef(null);
 
   const togglePlayPause = () => {
@@ -17,11 +19,13 @@ const MediaViewer = () => {
   };
 
   const seekForward = () => {
-    videoRef.current.seek(videoRef.current.currentTime + 5);
+    const newTime = Math.min(currentTime + 5, duration);
+    videoRef.current.seek(newTime);
   };
 
   const seekBackward = () => {
-    videoRef.current.seek(videoRef.current.currentTime - 5);
+    const newTime = Math.max(currentTime - 5, 0);
+    videoRef.current.seek(newTime);
   };
 
   const handleNext = () => {
@@ -39,16 +43,22 @@ const MediaViewer = () => {
   if (file.name.endsWith('.mp4')) {
     return (
       <View style={styles.container}>
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Text style={styles.backButtonText}>Back</Text>
+      </TouchableOpacity>
+
         <Video
           source={{ uri: `file://${file.path}` }}
           ref={videoRef}
           style={styles.video}
           paused={paused}
           resizeMode="contain"
+          onProgress={({ currentTime }) => setCurrentTime(currentTime)}
+          onLoad={({ duration }) => setDuration(duration)}
         />
         <Button title={paused ? "Play" : "Pause"} onPress={togglePlayPause} />
         <Button title="Forward 5s" onPress={seekForward} />
-        <Button title="Rewind 5s" onPress={seekBackward} />
+        <Button title="Backward 5s" onPress={seekBackward} />
         <Button title="Next" onPress={handleNext} />
         <Button title="Previous" onPress={handlePrevious} />
       </View>
@@ -56,6 +66,10 @@ const MediaViewer = () => {
   } else {
     return (
       <View style={styles.container}>
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Text style={styles.backButtonText}>Back</Text>
+      </TouchableOpacity>
+
         <Image source={{ uri: `file://${file.path}` }} style={styles.image} />
         <Button title="Next" onPress={handleNext} />
         <Button title="Previous" onPress={handlePrevious} />

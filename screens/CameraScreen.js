@@ -71,6 +71,18 @@ const CameraScreen = () => {
     }
   };
 
+  const saveMedia = async (media) => {
+    const destPath = `${RNFS.DocumentDirectoryPath}/${media.fileName}`;
+    await RNFS.moveFile(media.path, destPath);
+    setPhoto(null);
+    Alert.alert('Media saved!', 'The media has been saved successfully.');
+  };
+  
+  const discardMedia = async () => {
+    await RNFS.unlink(photo.path);
+    setPhoto(null);
+  };
+  
   const switchCamera = () => {
     setCameraFacing((prevFacing) => (prevFacing === 'back' ? 'front' : 'back'));
   };
@@ -114,17 +126,7 @@ const CameraScreen = () => {
   );
 };
 
-const saveMedia = async (media) => {
-  const destPath = `${RNFS.DocumentDirectoryPath}/${media.fileName}`;
-  await RNFS.moveFile(media.path, destPath);
-  setPhoto(null);
-  Alert.alert('Media saved!', 'The media has been saved successfully.');
-};
 
-const discardMedia = async () => {
-  await RNFS.unlink(photo.path);
-  setPhoto(null);
-};
 
 const styles = StyleSheet.create({
   container: {

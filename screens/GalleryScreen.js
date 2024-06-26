@@ -11,7 +11,10 @@ const GalleryScreen = () => {
   const loadMediaFiles = async () => {
     try {
       const files = await RNFS.readDir(RNFS.DocumentDirectoryPath);
-      setMediaFiles(files.filter(file => file.isFile()));
+      const mediaExtensions = ['.jpg', '.jpeg', '.png', '.mp4', '.mov'];
+      setMediaFiles(files.filter(file => file.isFile() &&
+       mediaExtensions.some(ext => file.name.toLowerCase().endsWith(ext))))
+       
     } catch (error) {
       console.error('Failed to load media files', error);
     }
