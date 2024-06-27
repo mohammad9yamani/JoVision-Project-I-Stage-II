@@ -59,7 +59,11 @@ const GalleryScreen = () => {
   };
 
   const openMedia = (index) => {
-    navigation.navigate('MediaViewer', { files: mediaFiles, currentIndex: index });
+    const serializableFiles = mediaFiles.map(file => ({
+      path: file.path,
+      name: file.name,
+    }));
+    navigation.navigate('MediaViewer', { files : serializableFiles , currentIndex: index });
   };
 
   const renderItem = ({ item, index }) => (

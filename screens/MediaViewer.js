@@ -14,6 +14,8 @@ const MediaViewer = () => {
   const [duration, setDuration] = useState(0);
   const videoRef = useRef(null);
 
+
+
   const togglePlayPause = () => {
     setPaused(!paused);
   };
@@ -56,11 +58,34 @@ const MediaViewer = () => {
           onProgress={({ currentTime }) => setCurrentTime(currentTime)}
           onLoad={({ duration }) => setDuration(duration)}
         />
-        <Button title={paused ? "Play" : "Pause"} onPress={togglePlayPause} />
-        <Button title="Forward 5s" onPress={seekForward} />
-        <Button title="Backward 5s" onPress={seekBackward} />
-        <Button title="Next" onPress={handleNext} />
-        <Button title="Previous" onPress={handlePrevious} />
+       <View style={styles.buttonContainer}>
+
+            <TouchableOpacity style={styles.button} onPress={handlePrevious}>
+              <Text>Previous</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.button} onPress={togglePlayPause}>
+              <Text>{paused ? "Play" : "Pause"}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.button} onPress={handleNext}>
+              <Text>Next</Text>
+            </TouchableOpacity>
+            
+        </View>
+          
+          <View style={styles.buttonContainer}>
+          
+            <TouchableOpacity style={styles.forwardBackwardButton} onPress={seekBackward}>
+              <Text>Backward 5s</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.forwardBackwardButton} onPress={seekForward}>
+              <Text>Forward 5s</Text>
+            </TouchableOpacity>
+
+          </View>
+
       </View>
     );
   } else {
@@ -71,8 +96,19 @@ const MediaViewer = () => {
       </TouchableOpacity>
 
         <Image source={{ uri: `file://${file.path}` }} style={styles.image} />
-        <Button title="Next" onPress={handleNext} />
-        <Button title="Previous" onPress={handlePrevious} />
+
+        <View style={styles.buttonContainer}>
+  
+            <TouchableOpacity style={styles.button} onPress={handlePrevious}>
+              <Text>Previous</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.button} onPress={handleNext}>
+              <Text>Next</Text>
+            </TouchableOpacity>
+
+        </View>
+        
       </View>
     );
   }
@@ -91,6 +127,39 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '70%',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    width: '100%',
+    marginTop: 10,
+  },
+  button: {
+    backgroundColor: 'gray',
+    padding: 10,
+    borderRadius: 5,
+    width: '20%',
+    alignItems: 'center',
+  },
+  backButton: {
+    position: 'absolute',
+    top: 20,
+    left: 20,
+    backgroundColor: 'gray',
+    padding: 10,
+    borderRadius: 5,
+  },
+  forwardBackwardButton: {
+    backgroundColor: 'gray',
+    padding: 10,
+    borderRadius: 5,
+    width: '30%',
+    alignItems: 'center',
+  },
+  
+  backButtonText: {
+    color: 'white',
   },
 });
 

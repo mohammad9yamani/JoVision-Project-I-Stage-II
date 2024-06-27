@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, Alert , Dimensions} from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import { accelerometer, SensorTypes, setUpdateIntervalForType } from 'react-native-sensors';
 import { requestMultiple, PERMISSIONS } from 'react-native-permissions';
@@ -8,6 +8,9 @@ const SensorsScreen = () => {
   const [location, setLocation] = useState({});
   const [orientation, setOrientation] = useState({});
   const [hasPermission, setHasPermission] = useState(false);
+
+  const { width, height } = Dimensions.get('window');
+  const isPortrait = height >= width;
 
   useEffect(() => {
     const requestPermissions = async () => {
@@ -77,15 +80,22 @@ const SensorsScreen = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <Text>Altitude: {location.altitude}</Text>
-      <Text>Longitude: {location.longitude}</Text>
-      <Text>Latitude: {location.latitude}</Text>
-      <Text>Speed: {location.speed}</Text>
+<View style={[styles.container, isPortrait ? styles.portraitContainer : styles.landscapeContainer]}>
+
+<View style={styles.dataContainer}>
+      <Text style={styles.label} >Altitude: {location.altitude}</Text>
+      <Text style={styles.label} >Longitude: {location.longitude}</Text>
+      <Text style={styles.label} >Latitude: {location.latitude}</Text>
+      <Text style={styles.label} >Speed: {location.speed}</Text>
+</View>
       <Image source={getSpeedImage()} style={styles.icon} />
-      <Text>X: {orientation.x}</Text>
-      <Text>Y: {orientation.y}</Text>
-      <Text>Z: {orientation.z}</Text>
+
+<View style={styles.dataContainer}>
+      <Text style={styles.label} >X: {orientation.x}</Text>
+      <Text style={styles.label} >Y: {orientation.y}</Text>
+      <Text style={styles.label} >Z: {orientation.z}</Text>
+</View>
+
       <Image source={getOrientationImage()} style={styles.icon} />
     </View>
   );
@@ -94,12 +104,34 @@ const SensorsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    padding: 20,
+    backgroundColor: '#f5f5f5',
+  },
+  portraitContainer: {
+    flexDirection: 'column',
+    justifyContent: 'space-around',
     alignItems: 'center',
   },
+  landscapeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+  },
+  dataContainer: {
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginVertical: 5,
+    textAlign: 'center',
+  },
   icon: {
-    width: 50,
-    height: 50,
+    width: 80,
+    height: 80,
+    marginVertical: 20,
   },
 });
 

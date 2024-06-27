@@ -100,10 +100,10 @@ const CameraScreen = () => {
           <Image source={{ uri: `file://${photo.path}` }} style={styles.preview} />
           <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.saveButton} onPress={() => saveMedia(photo)}>
-            <Text style={styles.switchButton}>Save</Text>
+            <Text style={styles.buttonText}>Save</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.discardButton} onPress={discardMedia}>
-            <Text style={styles.switchButton}>Discard</Text>
+            <Text style={styles.buttonText}>Discard</Text>
           </TouchableOpacity>
         </View>
         </>
@@ -164,12 +164,31 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 10,
     borderRadius: 5,
+    width: '20%',
   },
   switchButton: {
     marginHorizontal: 10,
     backgroundColor: 'white',
     padding: 10,
     borderRadius: 5,
+    width: '20%',
+  },
+  saveButton: {
+    marginHorizontal: 10,
+    backgroundColor: 'green',
+    padding: 10,
+    borderRadius: 5,
+    width: '20%',
+  },
+  discardButton: {
+    marginHorizontal: 10,
+    backgroundColor: 'red',
+    padding: 10,
+    borderRadius: 5,
+    width: '20%',
+  },
+  buttonText: {
+    color: 'white',
   },
 });
 
