@@ -98,8 +98,14 @@ const CameraScreen = () => {
       {photo ? (
         <>
           <Image source={{ uri: `file://${photo.path}` }} style={styles.preview} />
-          <Button title="Save" onPress={() => saveMedia(photo)} />
-          <Button title="Discard" onPress={discardMedia} />
+          <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.saveButton} onPress={() => saveMedia(photo)}>
+            <Text style={styles.switchButton}>Save</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.discardButton} onPress={discardMedia}>
+            <Text style={styles.switchButton}>Discard</Text>
+          </TouchableOpacity>
+        </View>
         </>
       ) : (
         <>
@@ -111,15 +117,18 @@ const CameraScreen = () => {
             photo={cameraMode === 'photo'}
             video={cameraMode === 'video'}
           />
-          <TouchableOpacity style={styles.captureButton} onPress={handleCapture}>
-            <Text>{cameraMode === 'photo' ? 'Take Photo' : (isRecording ? 'Stop Recording' : 'Record Video')}</Text>
-          </TouchableOpacity>
+          <View style={styles.buttonContainer}>
+        
           <TouchableOpacity style={styles.switchButton} onPress={switchCamera}>
             <Text>Switch Camera</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.captureButton} onPress={handleCapture}>
+            <Text>{cameraMode === 'photo' ? 'Take Photo' : (isRecording ? 'Stop Recording' : 'Record Video')}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.switchButton} onPress={switchMode}>
             <Text>Switch Mode</Text>
           </TouchableOpacity>
+          </View>
         </>
       )}
     </View>
@@ -142,16 +151,22 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
   },
-  captureButton: {
+  buttonContainer: {
     position: 'absolute',
     bottom: 20,
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  captureButton: {
+    marginHorizontal: 10,
     backgroundColor: 'white',
     padding: 10,
     borderRadius: 5,
   },
   switchButton: {
-    position: 'absolute',
-    bottom: 60,
+    marginHorizontal: 10,
     backgroundColor: 'white',
     padding: 10,
     borderRadius: 5,
